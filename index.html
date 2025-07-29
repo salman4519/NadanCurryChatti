@@ -1,0 +1,1176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nadan Curry Chatti - Authentic Kerala Cuisine Since 2022</title>
+    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.5.0/echarts.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#FF3B30',
+                        secondary: '#FFD700'
+                    },
+                    borderRadius: {
+                        'none': '0px',
+                        'sm': '4px',
+                        DEFAULT: '8px',
+                        'md': '12px',
+                        'lg': '16px',
+                        'xl': '20px',
+                        '2xl': '24px',
+                        '3xl': '32px',
+                        'full': '9999px',
+                        'button': '8px'
+                    },
+                    fontFamily: {
+                        'poppins': ['Poppins', 'sans-serif'],
+                        'playfair': ['Playfair Display', 'serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        :where([class^="ri-"])::before {
+            content: "\f3c2";
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #000000;
+            color: #ffffff;
+        }
+        
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .spice-particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #FFD700;
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.7; }
+            50% { transform: translateY(-20px) rotate(180deg); opacity: 1; }
+        }
+        
+        .steam-particle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 50%;
+            animation: steam 4s ease-out infinite;
+        }
+        
+        @keyframes steam {
+            0% { transform: translateY(0px); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateY(-100px); opacity: 0; }
+        }
+        
+        .parallax {
+            transform: translateZ(0);
+            will-change: transform;
+        }
+        
+        .hover-zoom {
+            transition: transform 0.3s ease;
+        }
+        
+        .hover-zoom:hover {
+            transform: scale(1.05);
+        }
+        
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .lightbox.active {
+            display: flex;
+        }
+        
+        .timeline-item {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.6s ease;
+        }
+        
+        .timeline-item.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .masonry {
+            column-count: 3;
+            column-gap: 1rem;
+        }
+        
+        .masonry-item {
+            break-inside: avoid;
+            margin-bottom: 1rem;
+        }
+        
+        @media (max-width: 768px) {
+            .masonry {
+                column-count: 2;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .masonry {
+                column-count: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 glass-effect transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <span class="text-2xl font-playfair font-bold text-secondary">Nadan Curry Chatti</span>
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#home" class="text-white hover:text-secondary transition-colors">Home</a>
+                    <a href="#about" class="text-white hover:text-secondary transition-colors">About</a>
+                    <a href="#owners" class="text-white hover:text-secondary transition-colors">Owners</a>
+                    <a href="#dishes" class="text-white hover:text-secondary transition-colors">Dishes</a>
+                    <a href="#gallery" class="text-white hover:text-secondary transition-colors">Gallery</a>
+                    <a href="#testimonials" class="text-white hover:text-secondary transition-colors">Reviews</a>
+                    <a href="#contact" class="text-white hover:text-secondary transition-colors">Contact</a>
+                </div>
+                <div class="md:hidden">
+                    <button id="mobile-menu-btn" class="text-white hover:text-secondary">
+                        <div class="w-6 h-6 flex items-center justify-center">
+                            <i class="ri-menu-line ri-lg"></i>
+                        </div>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div id="mobile-menu" class="hidden md:hidden glass-effect">
+            <div class="px-2 pt-2 pb-3 space-y-1">
+                <a href="#home" class="block px-3 py-2 text-white hover:text-secondary">Home</a>
+                <a href="#about" class="block px-3 py-2 text-white hover:text-secondary">About</a>
+                <a href="#owners" class="block px-3 py-2 text-white hover:text-secondary">Owners</a>
+                <a href="#dishes" class="block px-3 py-2 text-white hover:text-secondary">Dishes</a>
+                <a href="#gallery" class="block px-3 py-2 text-white hover:text-secondary">Gallery</a>
+                <a href="#testimonials" class="block px-3 py-2 text-white hover:text-secondary">Reviews</a>
+                <a href="#contact" class="block px-3 py-2 text-white hover:text-secondary">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="relative min-h-screen flex items-center justify-center overflow-hidden">
+        <div class="absolute inset-0 z-0">
+            <div class="w-full h-full bg-cover bg-center bg-no-repeat" style="background-image: url('./assets/nadancurryhero.jpg')"></div>
+            <div class="absolute inset-0 bg-black bg-opacity-50"></div>
+        </div>
+        
+        <!-- Steam Particles -->
+        <div class="absolute inset-0 pointer-events-none">
+            <div class="steam-particle" style="left: 20%; animation-delay: 0s;"></div>
+            <div class="steam-particle" style="left: 30%; animation-delay: 1s;"></div>
+            <div class="steam-particle" style="left: 40%; animation-delay: 2s;"></div>
+            <div class="steam-particle" style="left: 60%; animation-delay: 0.5s;"></div>
+            <div class="steam-particle" style="left: 70%; animation-delay: 1.5s;"></div>
+        </div>
+        
+        <!-- Spice Particles -->
+        <div class="absolute inset-0 pointer-events-none">
+            <div class="spice-particle" style="top: 20%; left: 10%; animation-delay: 0s;"></div>
+            <div class="spice-particle" style="top: 30%; left: 80%; animation-delay: 2s;"></div>
+            <div class="spice-particle" style="top: 60%; left: 15%; animation-delay: 4s;"></div>
+            <div class="spice-particle" style="top: 70%; left: 85%; animation-delay: 1s;"></div>
+        </div>
+        
+        <div class="relative z-10 text-center px-4 max-w-4xl mx-auto">
+            <h1 class="text-5xl md:text-7xl font-playfair font-bold mb-6 text-white">
+                The Taste of <span class="text-secondary">Home</span>
+            </h1>
+            <p class="text-xl md:text-2xl mb-4 text-gray-200">Since 2022</p>
+            <p class="text-lg md:text-xl mb-8 text-gray-300 max-w-2xl mx-auto">
+                Experience authentic Kerala cuisine crafted with traditional recipes and the finest spices
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <button class="bg-primary hover:bg-red-600 text-white px-8 py-3 !rounded-button text-lg font-semibold transition-all duration-300 whitespace-nowrap">
+                    Order Now
+                </button>
+                <button class="glass-effect hover:bg-white hover:bg-opacity-20 text-white px-8 py-3 !rounded-button text-lg font-semibold transition-all duration-300 whitespace-nowrap">
+                    View Menu
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Us -->
+    <section id="about" class="py-20 relative overflow-hidden">
+        <div class="absolute inset-0 parallax" style="background-image: url('https://readdy.ai/api/search-image?query=traditional%20kerala%20spices%20and%20ingredients%20scattered%20on%20dark%20wooden%20surface%2C%20cinnamon%20sticks%20cardamom%20cloves%20turmeric%20powder%2C%20warm%20ambient%20lighting%2C%20rustic%20authentic%20indian%20kitchen%20background&width=1920&height=1080&seq=about-bg&orientation=landscape'); opacity: 0.1;"></div>
+        
+        <!-- Floating Spices -->
+        <div class="absolute inset-0 pointer-events-none">
+            <div class="spice-particle" style="top: 10%; left: 20%; animation-delay: 0s;"></div>
+            <div class="spice-particle" style="top: 80%; left: 70%; animation-delay: 3s;"></div>
+            <div class="spice-particle" style="top: 40%; left: 90%; animation-delay: 1.5s;"></div>
+        </div>
+        
+        <div class="max-w-6xl mx-auto px-4 relative z-10">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-playfair font-bold mb-6 text-white">Our Story</h2>
+                <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+                    Born from a passion for authentic Kerala flavors, Nadan Curry Chatti brings you the true taste of God's Own Country
+                </p>
+            </div>
+            
+            <div class="relative">
+                <div class="absolute left-1/2 transform -translate-x-1/2 h-full w-1 bg-secondary"></div>
+                
+                <div class="timeline-item mb-12">
+                    <div class="flex items-center mb-4">
+                        <div class="glass-effect p-6 rounded-xl max-w-lg ml-auto mr-8">
+                            <h3 class="text-2xl font-playfair font-bold text-secondary mb-2">2022 - The Beginning</h3>
+                            <p class="text-gray-300">
+                                Started with a dream to bring authentic Kerala home-style cooking to food lovers. Our founders, passionate about preserving traditional recipes, opened the first Nadan Curry Chatti.
+                            </p>
+                        </div>
+                        <div class="w-4 h-4 bg-secondary rounded-full"></div>
+                    </div>
+                </div>
+                
+                <div class="timeline-item mb-12">
+                    <div class="flex items-center mb-4 flex-row-reverse">
+                        <div class="glass-effect p-6 rounded-xl max-w-lg mr-auto ml-8">
+                            <h3 class="text-2xl font-playfair font-bold text-secondary mb-2">2023 - Recognition</h3>
+                            <p class="text-gray-300">
+                                Gained recognition as the most authentic Kerala restaurant in the city. Featured in local food magazines and won the "Best Traditional Cuisine" award.
+                            </p>
+                        </div>
+                        <div class="w-4 h-4 bg-secondary rounded-full"></div>
+                    </div>
+                </div>
+                
+                <div class="timeline-item mb-12">
+                    <div class="flex items-center mb-4">
+                        <div class="glass-effect p-6 rounded-xl max-w-lg ml-auto mr-8">
+                            <h3 class="text-2xl font-playfair font-bold text-secondary mb-2">2024 - Expansion</h3>
+                            <p class="text-gray-300">
+                                Expanded our menu to include more regional specialties and introduced online ordering. Now serving over 500 satisfied customers weekly.
+                            </p>
+                        </div>
+                        <div class="w-4 h-4 bg-secondary rounded-full"></div>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="flex items-center mb-4 flex-row-reverse">
+                        <div class="glass-effect p-6 rounded-xl max-w-lg mr-auto ml-8">
+                            <h3 class="text-2xl font-playfair font-bold text-secondary mb-2">2025 - Future</h3>
+                            <p class="text-gray-300">
+                                Continuing our mission to serve the most authentic Kerala cuisine while maintaining the homely touch that makes us special.
+                            </p>
+                        </div>
+                        <div class="w-4 h-4 bg-secondary rounded-full"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Meet the Owners -->
+    <section id="owners" class="py-20 bg-gray-900">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-playfair font-bold mb-6 text-white">Meet Our Founders</h2>
+                <p class="text-xl text-gray-300">The passionate minds behind authentic Kerala flavors</p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-12">
+                <div class="owner-card glass-effect p-8 rounded-xl text-center hover-zoom">
+                    <div class="w-48 h-48 mx-auto mb-6 rounded-full overflow-hidden">
+                        <img src="./assets/shanu.jpg">
+                    </div>
+                    <h3 class="text-2xl font-playfair font-bold text-secondary mb-2">Mohammed Shanid</h3>
+                    <p class="text-lg text-gray-300 mb-4">Founder</p>
+                    <!-- <p class="text-gray-400">
+                        With over 15 years of culinary experience in Kerala's traditional kitchens, Chef Rajesh brings authentic flavors and time-honored cooking techniques to every dish. His passion for preserving Kerala's culinary heritage drives our kitchen's excellence.
+                    </p> -->
+                </div>
+                
+                <div class="owner-card glass-effect p-8 rounded-xl text-center hover-zoom">
+                    <div class="w-48 h-48 mx-auto mb-6 rounded-full overflow-hidden">
+                        <img src="./assets/mansoorr.jpg">
+                    </div>
+                    <h3 class="text-2xl font-playfair font-bold text-secondary mb-2">Mansoor Hassan</h3>
+                    <p class="text-lg text-gray-300 mb-4">Founder</p>
+                    <!-- <p class="text-gray-400">
+                        Born and raised in Kerala, Priya ensures that every guest experiences the warmth of Kerala hospitality. Her attention to detail and commitment to customer satisfaction makes every visit memorable and authentic.
+                    </p> -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Our Dishes -->
+    <section id="dishes" class="py-20">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-playfair font-bold mb-6 text-white">Our Signature Dishes</h2>
+                <p class="text-xl text-gray-300">Authentic Kerala flavors crafted with love and tradition</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="dish-item glass-effect rounded-xl overflow-hidden hover-zoom cursor-pointer" onclick="openLightbox('./assets/65.jpg')">
+                    <img src="./assets/65.jpg" />
+                    <div class="p-4">
+                        <h3 class="text-xl font-playfair font-bold text-secondary">Chicken 65</h3>
+                    </div>
+                </div>
+                
+                <div class="dish-item glass-effect rounded-xl overflow-hidden hover-zoom cursor-pointer" onclick="openLightbox('./assets/chaar.jpg')">
+                    <img src="./assets/chaar.jpg" />
+                    <div class="p-4">
+                        <h3 class="text-xl font-playfair font-bold text-secondary">Chicken Chaar</h3>
+                    </div>
+                </div>
+                
+                <div class="dish-item glass-effect rounded-xl overflow-hidden hover-zoom cursor-pointer" onclick="openLightbox('./assets/chilli.jpg')">
+                    <img src="./assets/chilli.jpg" />
+                    <div class="p-4">
+                        <h3 class="text-xl font-playfair font-bold text-secondary">Chicken Chilli</h3>
+                    </div>
+                </div>
+                
+                <div class="dish-item glass-effect rounded-xl overflow-hidden hover-zoom cursor-pointer" onclick="openLightbox('./assets/dryfrychest.jpg')">
+                    <img src="./assets/dryfrychest.jpg" />
+                    <div class="p-4">
+                        <h3 class="text-xl font-playfair font-bold text-secondary">Chicken Dry Fry Chest</h3>
+                    </div>
+                </div>
+                
+                <div class="dish-item glass-effect rounded-xl overflow-hidden hover-zoom cursor-pointer" onclick="openLightbox('./assets/beefchilly.jpg')">
+                    <img src="./assets/beefchilly.jpg" />
+                    <div class="p-4">
+                        <h3 class="text-xl font-playfair font-bold text-secondary">Beef Chilly</h3>
+                    </div>
+                </div>
+                
+                <div class="dish-item glass-effect rounded-xl overflow-hidden hover-zoom cursor-pointer" onclick="openLightbox('./assets/beefdryfry.jpg')">
+                    <img src="./assets/beefdryfry.jpg" />
+                    <div class="p-4">
+                        <h3 class="text-xl font-playfair font-bold text-secondary">Beef Dry Fry</h3>
+                    </div>
+                </div>
+                
+                <div class="dish-item glass-effect rounded-xl overflow-hidden hover-zoom cursor-pointer" onclick="openLightbox('./assets/beeffry.jpg')">
+                    <img src="./assets/beeffry.jpg" />
+                    <div class="p-4">
+                        <h3 class="text-xl font-playfair font-bold text-secondary">Beef Fry</h3>
+                    </div>
+                </div>
+                
+                <div class="dish-item glass-effect rounded-xl overflow-hidden hover-zoom cursor-pointer" onclick="openLightbox('./assets/beefmasala.jpg')">
+                    <img src="./assets/beefmasala.jpg" />
+                    <div class="p-4">
+                        <h3 class="text-xl font-playfair font-bold text-secondary">Beef Masala</h3>
+                    </div>
+                </div>
+                
+                <div class="dish-item glass-effect rounded-xl overflow-hidden hover-zoom cursor-pointer" onclick="openLightbox('./assets/kallumakkaya.jpg')">
+                    <img src="./assets/kallumakkaya.jpg" />
+                    <div class="p-4">
+                        <h3 class="text-xl font-playfair font-bold text-secondary">Kallummakaya</h3>
+                    </div>
+                </div>
+                
+                <div class="dish-item glass-effect rounded-xl overflow-hidden hover-zoom cursor-pointer" onclick="openLightbox('./assets/kothuporota.jpg')">
+                    <img src="./assets/kothuporota.jpg" />
+                    <div class="p-4">
+                        <h3 class="text-xl font-playfair font-bold text-secondary">Kothu Porotta</h3>
+                    </div>
+                </div>
+                
+                <div class="dish-item glass-effect rounded-xl overflow-hidden hover-zoom cursor-pointer" onclick="openLightbox('./assets/kothuporota.jpg')">
+                    <img src="./assets/masala.jpg" />
+                    <div class="p-4">
+                        <h3 class="text-xl font-playfair font-bold text-secondary">Chicken Masala</h3>
+                    </div>
+                </div>
+                
+                <div class="dish-item glass-effect rounded-xl overflow-hidden hover-zoom cursor-pointer" onclick="openLightbox('./assets/pepper.jpg')">
+                    <img src="./assets/pepper.jpg" />
+                    <div class="p-4">
+                        <h3 class="text-xl font-playfair font-bold text-secondary">Pepper Chicken</h3>
+                    </div>
+                </div>
+                
+                <div class="dish-item glass-effect rounded-xl overflow-hidden hover-zoom cursor-pointer" onclick="openLightbox('./assets/puttumix.jpg')">
+                    <img src="./assets/puttumix.jpg" />
+                    <div class="p-4">
+                        <h3 class="text-xl font-playfair font-bold text-secondary">Puttu Mix</h3>
+                    </div>
+                </div>
+                
+                <div class="dish-item glass-effect rounded-xl overflow-hidden hover-zoom cursor-pointer" onclick="openLightbox('./assets/sukka.jpg')">
+                    <img src="./assets/sukka.jpg" />
+                    <div class="p-4">
+                        <h3 class="text-xl font-playfair font-bold text-secondary">Chicken Sukka</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery -->
+    <section id="gallery" class="py-20 bg-gray-900">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-playfair font-bold mb-6 text-white">Gallery</h2>
+                <p class="text-xl text-gray-300">Moments from our restaurant and happy customers</p>
+            </div>
+            
+            <div class="masonry">
+                <div class="masonry-item">
+                    <div class="glass-effect rounded-xl overflow-hidden hover-zoom cursor-pointer" onclick="openLightbox('./assets/shop1.jpg')">
+                        <img src="./assets/shop1.jpg">
+                    </div>
+                </div>
+                
+                <div class="masonry-item">
+                   <div class="glass-effect rounded-xl overflow-hidden hover-zoom cursor-pointer" onclick="openLightbox('./assets/shop2.jpg')">
+                        <img src="./assets/shop2.jpg">
+                    </div>
+                </div>
+                
+                <div class="masonry-item">
+                    <div class="glass-effect rounded-xl overflow-hidden hover-zoom cursor-pointer" onclick="openLightbox('./assets/shop3.jpg')">
+                        <img src="./assets/shop3.jpg">
+                    </div>
+                </div>
+
+                 <div class="masonry-item">
+                    <div class="glass-effect rounded-xl overflow-hidden hover-zoom cursor-pointer" onclick="openLightbox('./assets/shop4.jpg')">
+                        <img src="./assets/shop4.jpg">
+                    </div>
+                </div>
+                
+                <div class="masonry-item">
+                    <div class="glass-effect rounded-xl overflow-hidden hover-zoom cursor-pointer" onclick="openLightbox('./assets/logo.jpg')">
+                        <img src="./assets/logo.jpg">
+                    </div>
+                </div>
+                
+                <div class="masonry-item">
+                   <div class="glass-effect rounded-xl overflow-hidden hover-zoom cursor-pointer" onclick="openLightbox('./assets/pic1.jpg')">
+                        <img src="./assets/pic1.jpg">
+                    </div>
+                </div>
+                
+                <!-- <div class="masonry-item">
+                    <div class="glass-effect rounded-xl overflow-hidden hover-zoom cursor-pointer" onclick="openLightbox('./assets/pic1.jpg')">
+                        <img src="./assets/pic1.jpg">
+                    </div>
+                </div> -->
+                
+                <!-- <div class="masonry-item">
+    <div class="glass-effect rounded-xl overflow-hidden hover-zoom cursor-pointer" onclick="openLightbox('./assets/vid1.mp4', 'video')">
+        <video src="./assets/vid1.mp4" poster="./assets/vid1-thumbnail.jpg" class="w-full object-cover object-top" muted playsinline></video>
+        <div class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-40">
+            <i class="ri-play-circle-fill ri-4x text-white opacity-80 group-hover:opacity-100 transition-opacity"></i>
+        </div>
+    </div>
+</div>
+                
+                <div class="masonry-item">
+                    <div class="glass-effect rounded-xl overflow-hidden hover-zoom cursor-pointer" onclick="openLightbox('https://readdy.ai/api/search-image?query=kerala%20restaurant%20staff%20serving%20food%20to%20customers%2C%20professional%20service%2C%20traditional%20indian%20hospitality%2C%20waiters%20in%20uniform&width=600&height=400&seq=gallery8&orientation=landscape')">
+                        <img src="https://readdy.ai/api/search-image?query=kerala%20restaurant%20staff%20serving%20food%20to%20customers%2C%20professional%20service%2C%20traditional%20indian%20hospitality%2C%20waiters%20in%20uniform&width=600&height=400&seq=gallery8&orientation=landscape" alt="Service" class="w-full object-cover object-top">
+                    </div>
+                </div>
+                
+                <div class="masonry-item">
+                    <div class="glass-effect rounded-xl overflow-hidden hover-zoom cursor-pointer" onclick="openLightbox('https://readdy.ai/api/search-image?query=kerala%20restaurant%20private%20dining%20room%20with%20traditional%20decor%2C%20intimate%20setting%2C%20wooden%20furniture%2C%20cultural%20artwork%20on%20walls&width=600&height=800&seq=gallery9&orientation=portrait')">
+                        <img src="https://readdy.ai/api/search-image?query=kerala%20restaurant%20private%20dining%20room%20with%20traditional%20decor%2C%20intimate%20setting%2C%20wooden%20furniture%2C%20cultural%20artwork%20on%20walls&width=600&height=800&seq=gallery9&orientation=portrait" alt="Private Dining" class="w-full object-cover object-top">
+                    </div>
+                </div>
+                
+                <div class="masonry-item">
+                    <div class="glass-effect rounded-xl overflow-hidden hover-zoom cursor-pointer" onclick="openLightbox('https://readdy.ai/api/search-image?query=kerala%20restaurant%20outdoor%20seating%20area%20with%20plants%20and%20traditional%20elements%2C%20evening%20lighting%2C%20relaxed%20atmosphere%2C%20al%20fresco%20dining&width=600&height=400&seq=gallery10&orientation=landscape')">
+                        <img src="https://readdy.ai/api/search-image?query=kerala%20restaurant%20outdoor%20seating%20area%20with%20plants%20and%20traditional%20elements%2C%20evening%20lighting%2C%20relaxed%20atmosphere%2C%20al%20fresco%20dining&width=600&height=400&seq=gallery10&orientation=landscape" alt="Outdoor Seating" class="w-full object-cover object-top">
+                    </div>
+                </div>
+                
+                <div class="masonry-item">
+                    <div class="glass-effect rounded-xl overflow-hidden hover-zoom cursor-pointer" onclick="openLightbox('https://readdy.ai/api/search-image?query=kerala%20restaurant%20bar%20area%20with%20traditional%20drinks%20and%20beverages%2C%20coconut%20water%2C%20fresh%20juices%2C%20authentic%20indian%20drinks%20setup&width=600&height=600&seq=gallery11&orientation=squarish')">
+                        <img src="https://readdy.ai/api/search-image?query=kerala%20restaurant%20bar%20area%20with%20traditional%20drinks%20and%20beverages%2C%20coconut%20water%2C%20fresh%20juices%2C%20authentic%20indian%20drinks%20setup&width=600&height=600&seq=gallery11&orientation=squarish" alt="Beverage Area" class="w-full object-cover object-top">
+                    </div>
+                </div>
+                
+                <div class="masonry-item">
+                    <div class="glass-effect rounded-xl overflow-hidden hover-zoom cursor-pointer" onclick="openLightbox('https://readdy.ai/api/search-image?query=couple%20enjoying%20romantic%20dinner%20at%20kerala%20restaurant%2C%20candlelight%2C%20intimate%20setting%2C%20traditional%20food%20spread%2C%20romantic%20atmosphere&width=600&height=400&seq=gallery12&orientation=landscape')">
+                        <img src="https://readdy.ai/api/search-image?query=couple%20enjoying%20romantic%20dinner%20at%20kerala%20restaurant%2C%20candlelight%2C%20intimate%20setting%2C%20traditional%20food%20spread%2C%20romantic%20atmosphere&width=600&height=400&seq=gallery12&orientation=landscape" alt="Romantic Dinner" class="w-full object-cover object-top">
+                    </div>
+                </div>
+                
+                <div class="masonry-item">
+                    <div class="glass-effect rounded-xl overflow-hidden hover-zoom cursor-pointer" onclick="openLightbox('https://readdy.ai/api/search-image?query=kerala%20restaurant%20buffet%20setup%20with%20various%20traditional%20dishes%2C%20colorful%20food%20display%2C%20authentic%20indian%20buffet%20presentation&width=600&height=800&seq=gallery13&orientation=portrait')">
+                        <img src="https://readdy.ai/api/search-image?query=kerala%20restaurant%20buffet%20setup%20with%20various%20traditional%20dishes%2C%20colorful%20food%20display%2C%20authentic%20indian%20buffet%20presentation&width=600&height=800&seq=gallery13&orientation=portrait" alt="Buffet Setup" class="w-full object-cover object-top">
+                    </div>
+                </div>
+                
+                <div class="masonry-item">
+                    <div class="glass-effect rounded-xl overflow-hidden hover-zoom cursor-pointer" onclick="openLightbox('https://readdy.ai/api/search-image?query=business%20meeting%20at%20kerala%20restaurant%2C%20professionals%20dining%20and%20discussing%2C%20corporate%20lunch%20setting%2C%20modern%20business%20atmosphere&width=600&height=400&seq=gallery14&orientation=landscape')">
+                        <img src="https://readdy.ai/api/search-image?query=business%20meeting%20at%20kerala%20restaurant%2C%20professionals%20dining%20and%20discussing%2C%20corporate%20lunch%20setting%2C%20modern%20business%20atmosphere&width=600&height=400&seq=gallery14&orientation=landscape" alt="Business Dining" class="w-full object-cover object-top">
+                    </div>
+                </div>
+                
+                <div class="masonry-item">
+                    <div class="glass-effect rounded-xl overflow-hidden hover-zoom cursor-pointer" onclick="openLightbox('https://readdy.ai/api/search-image?query=kerala%20restaurant%20takeaway%20counter%20with%20packaged%20food%2C%20modern%20ordering%20system%2C%20efficient%20service%20setup%2C%20takeout%20area&width=600&height=600&seq=gallery15&orientation=squarish')">
+                        <img src="https://readdy.ai/api/search-image?query=kerala%20restaurant%20takeaway%20counter%20with%20packaged%20food%2C%20modern%20ordering%20system%2C%20efficient%20service%20setup%2C%20takeout%20area&width=600&height=600&seq=gallery15&orientation=squarish" alt="Takeaway Counter" class="w-full object-cover object-top">
+                    </div>
+                </div>
+            </div> -->
+            
+            <!-- Embedded Video -->
+            <!-- <div class="mt-12 max-w-4xl mx-auto">
+                <div class="glass-effect rounded-xl overflow-hidden">
+                    <div class="aspect-video bg-gray-800 flex items-center justify-center relative">
+                        <div class="absolute inset-0 bg-cover bg-center bg-no-repeat" style="background-image: url('./assets/vid1.mp4')"></div>
+                        <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
+                            <button class="w-20 h-20 bg-primary rounded-full flex items-center justify-center hover:bg-red-600 transition-colors">
+                                <div class="w-8 h-8 flex items-center justify-center">
+                                    <i class="ri-play-fill ri-2x text-white"></i>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section id="testimonials" class="py-20">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-playfair font-bold mb-6 text-white">What Our Customers Say</h2>
+                <p class="text-xl text-gray-300">Authentic reviews from our satisfied guests</p>
+            </div>
+            
+            <div class="relative">
+                <div id="testimonial-slider" class="overflow-hidden">
+                    <div class="flex transition-transform duration-500 ease-in-out" id="testimonial-track">
+                        <div class="w-full flex-shrink-0 px-4">
+                            <div class="glass-effect p-8 rounded-xl text-center max-w-4xl mx-auto">
+                                <div class="flex justify-center mb-4">
+                                    <div class="flex text-secondary">
+                                        <i class="ri-star-fill"></i>
+                                        <i class="ri-star-fill"></i>
+                                        <i class="ri-star-fill"></i>
+                                        <i class="ri-star-fill"></i>
+                                        <i class="ri-star-fill"></i>
+                                    </div>
+                                </div>
+                                <p class="text-xl text-gray-300 mb-6 italic">
+                                    "Absolutely amazing! The fish curry reminded me of my grandmother's cooking back in Kerala. The authentic flavors and warm hospitality make this place truly special. Best Kerala restaurant I've been to outside of Kerala!"
+                                </p>
+                                <div class="flex items-center justify-center">
+                                    <img src="https://readdy.ai/api/search-image?query=professional%20portrait%20of%20happy%20indian%20woman%20customer%20smiling%2C%20middle%20aged%2C%20wearing%20traditional%20indian%20attire%2C%20warm%20expression%2C%20restaurant%20customer%20testimonial%20photo&width=80&height=80&seq=customer1&orientation=squarish" alt="Sarah Johnson" class="w-16 h-16 rounded-full mr-4 object-cover object-top">
+                                    <div>
+                                        <h4 class="text-lg font-semibold text-white">Meera Krishnan</h4>
+                                        <p class="text-gray-400">Food Blogger</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="w-full flex-shrink-0 px-4">
+                            <div class="glass-effect p-8 rounded-xl text-center max-w-4xl mx-auto">
+                                <div class="flex justify-center mb-4">
+                                    <div class="flex text-secondary">
+                                        <i class="ri-star-fill"></i>
+                                        <i class="ri-star-fill"></i>
+                                        <i class="ri-star-fill"></i>
+                                        <i class="ri-star-fill"></i>
+                                        <i class="ri-star-fill"></i>
+                                    </div>
+                                </div>
+                                <p class="text-xl text-gray-300 mb-6 italic">
+                                    "The beef roast and appam combination was phenomenal! The spices were perfectly balanced and the service was exceptional. Chef Rajesh and Priya have created something truly authentic here."
+                                </p>
+                                <div class="flex items-center justify-center">
+                                    <img src="https://readdy.ai/api/search-image?query=professional%20portrait%20of%20happy%20indian%20man%20customer%20smiling%2C%20young%20professional%2C%20wearing%20casual%20shirt%2C%20satisfied%20expression%2C%20restaurant%20customer%20testimonial%20photo&width=80&height=80&seq=customer2&orientation=squarish" alt="Michael Chen" class="w-16 h-16 rounded-full mr-4 object-cover object-top">
+                                    <div>
+                                        <h4 class="text-lg font-semibold text-white">Arjun Menon</h4>
+                                        <p class="text-gray-400">Software Engineer</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="w-full flex-shrink-0 px-4">
+                            <div class="glass-effect p-8 rounded-xl text-center max-w-4xl mx-auto">
+                                <div class="flex justify-center mb-4">
+                                    <div class="flex text-secondary">
+                                        <i class="ri-star-fill"></i>
+                                        <i class="ri-star-fill"></i>
+                                        <i class="ri-star-fill"></i>
+                                        <i class="ri-star-fill"></i>
+                                        <i class="ri-star-fill"></i>
+                                    </div>
+                                </div>
+                                <p class="text-xl text-gray-300 mb-6 italic">
+                                    "As someone from Kerala, I can confidently say this is the most authentic Kerala food I've had outside my home state. The payasam was divine! Highly recommend to anyone craving real Kerala flavors."
+                                </p>
+                                <div class="flex items-center justify-center">
+                                    <img src="https://readdy.ai/api/search-image?query=professional%20portrait%20of%20happy%20elderly%20indian%20woman%20customer%20smiling%2C%20traditional%20saree%2C%20warm%20grandmother-like%20expression%2C%20restaurant%20customer%20testimonial%20photo&width=80&height=80&seq=customer3&orientation=squarish" alt="Emily Davis" class="w-16 h-16 rounded-full mr-4 object-cover object-top">
+                                    <div>
+                                        <h4 class="text-lg font-semibold text-white">Lakshmi Pillai</h4>
+                                        <p class="text-gray-400">Retired Teacher</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <button id="prev-testimonial" class="absolute left-0 top-1/2 transform -translate-y-1/2 w-12 h-12 bg-primary rounded-full flex items-center justify-center hover:bg-red-600 transition-colors">
+                    <div class="w-6 h-6 flex items-center justify-center">
+                        <i class="ri-arrow-left-line text-white"></i>
+                    </div>
+                </button>
+                <button id="next-testimonial" class="absolute right-0 top-1/2 transform -translate-y-1/2 w-12 h-12 bg-primary rounded-full flex items-center justify-center hover:bg-red-600 transition-colors">
+                    <div class="w-6 h-6 flex items-center justify-center">
+                        <i class="ri-arrow-right-line text-white"></i>
+                    </div>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Hours & Location -->
+    <section class="py-20 bg-gray-900">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-playfair font-bold mb-6 text-white">Visit Us</h2>
+                <p class="text-xl text-gray-300">Find us and our opening hours</p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-12">
+                <div class="glass-effect p-8 rounded-xl">
+                    <h3 class="text-2xl font-playfair font-bold text-secondary mb-6">Opening Hours</h3>
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-center">
+                                <div class="w-6 h-6 flex items-center justify-center mr-3">
+                                    <i class="ri-time-line text-secondary"></i>
+                                </div>
+                                <span class="text-white">Monday</span>
+                            </div>
+                            <span class="text-gray-300">11:00 AM - 10:00 PM</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-center">
+                                <div class="w-6 h-6 flex items-center justify-center mr-3">
+                                    <i class="ri-time-line text-secondary"></i>
+                                </div>
+                                <span class="text-white">Tuesday</span>
+                            </div>
+                            <span class="text-gray-300">11:00 AM - 10:00 PM</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-center">
+                                <div class="w-6 h-6 flex items-center justify-center mr-3">
+                                    <i class="ri-time-line text-secondary"></i>
+                                </div>
+                                <span class="text-white">Wednesday</span>
+                            </div>
+                            <span class="text-gray-300">11:00 AM - 10:00 PM</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-center">
+                                <div class="w-6 h-6 flex items-center justify-center mr-3">
+                                    <i class="ri-time-line text-secondary"></i>
+                                </div>
+                                <span class="text-white">Thursday</span>
+                            </div>
+                            <span class="text-gray-300">11:00 AM - 10:00 PM</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-center">
+                                <div class="w-6 h-6 flex items-center justify-center mr-3">
+                                    <i class="ri-time-line text-secondary"></i>
+                                </div>
+                                <span class="text-white">Friday</span>
+                            </div>
+                            <span class="text-gray-300">11:00 AM - 11:00 PM</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-center">
+                                <div class="w-6 h-6 flex items-center justify-center mr-3">
+                                    <i class="ri-time-line text-secondary"></i>
+                                </div>
+                                <span class="text-white">Saturday</span>
+                            </div>
+                            <span class="text-gray-300">11:00 AM - 11:00 PM</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-center">
+                                <div class="w-6 h-6 flex items-center justify-center mr-3">
+                                    <i class="ri-time-line text-secondary"></i>
+                                </div>
+                                <span class="text-white">Sunday</span>
+                            </div>
+                            <span class="text-gray-300">12:00 PM - 10:00 PM</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="glass-effect p-8 rounded-xl">
+                    <h3 class="text-2xl font-playfair font-bold text-secondary mb-6">Location</h3>
+                    <div class="aspect-video bg-gray-800 rounded-lg overflow-hidden">
+    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3895.419985288774!2d75.00155207538529!3d12.488297987784431!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba483c5fc05885f%3A0x8d73049b979a9df!2sNadan%20currychatti%20Restaurant%20Chemnad!5e0!3m2!1sen!2sin!4v1753782405012!5m2!1sen!2sin" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+</div>
+                    <div class="mt-4">
+                        <div class="flex items-start mb-3">
+                            <div class="w-6 h-6 flex items-center justify-center mr-3 mt-1">
+                                <i class="ri-map-pin-line text-secondary"></i>
+                            </div>
+                            <div>
+                                <p class="text-white">kstp road, near Royal Enfield showroom, Chemnad,</p>
+                                <p class="text-gray-300"> Kerala 671317</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="w-6 h-6 flex items-center justify-center mr-3">
+                                <i class="ri-phone-line text-secondary"></i>
+                            </div>
+                            <p class="text-white">(555) 123-CURRY</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Order & Contact -->
+    <section id="contact" class="py-20">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-playfair font-bold mb-6 text-white">Order & Contact</h2>
+                <p class="text-xl text-gray-300">Ready to taste authentic Kerala cuisine?</p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-12">
+                <div class="glass-effect p-8 rounded-xl">
+                    <h3 class="text-2xl font-playfair font-bold text-secondary mb-6">Make a Reservation</h3>
+                    <form class="space-y-6">
+                        <div>
+                            <label class="block text-white mb-2">Name</label>
+                            <input type="text" class="w-full p-3 bg-gray-800 border border-gray-700 rounded-lg text-white focus:border-secondary focus:outline-none" placeholder="Your Name">
+                        </div>
+                        <div>
+                            <label class="block text-white mb-2">Phone</label>
+                            <input type="tel" class="w-full p-3 bg-gray-800 border border-gray-700 rounded-lg text-white focus:border-secondary focus:outline-none" placeholder="Your Phone Number">
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-white mb-2">Date</label>
+                                <input type="date" class="w-full p-3 bg-gray-800 border border-gray-700 rounded-lg text-white focus:border-secondary focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-white mb-2">Time</label>
+                                <input type="time" class="w-full p-3 bg-gray-800 border border-gray-700 rounded-lg text-white focus:border-secondary focus:outline-none">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-white mb-2">Party Size</label>
+                            <select class="w-full p-3 bg-gray-800 border border-gray-700 rounded-lg text-white focus:border-secondary focus:outline-none pr-8">
+                                <option>2 People</option>
+                                <option>3 People</option>
+                                <option>4 People</option>
+                                <option>5+ People</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-white mb-2">Special Requests</label>
+                            <textarea class="w-full p-3 bg-gray-800 border border-gray-700 rounded-lg text-white focus:border-secondary focus:outline-none h-24" placeholder="Any special requests or dietary requirements?"></textarea>
+                        </div>
+                        <button type="submit" class="w-full bg-primary hover:bg-red-600 text-white py-3 !rounded-button font-semibold transition-colors whitespace-nowrap">
+                            Make Reservation
+                        </button>
+                    </form>
+                </div>
+                
+                <div class="glass-effect p-8 rounded-xl">
+                    <h3 class="text-2xl font-playfair font-bold text-secondary mb-6">Contact Information</h3>
+                    <div class="space-y-6">
+                        <div class="flex items-center">
+                            <div class="w-12 h-12 bg-primary rounded-full flex items-center justify-center mr-4">
+                                <div class="w-6 h-6 flex items-center justify-center">
+                                    <i class="ri-phone-line text-white"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <p class="text-white font-semibold">Phone</p>
+                                <p class="text-gray-300">(555) 123-CURRY</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center">
+                            <div class="w-12 h-12 bg-primary rounded-full flex items-center justify-center mr-4">
+                                <div class="w-6 h-6 flex items-center justify-center">
+                                    <i class="ri-mail-line text-white"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <p class="text-white font-semibold">Email</p>
+                                <p class="text-gray-300">hello@nadancurrychatti.com</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="w-12 h-12 bg-primary rounded-full flex items-center justify-center mr-4 mt-1">
+                                <div class="w-6 h-6 flex items-center justify-center">
+                                    <i class="ri-map-pin-line text-white"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <p class="text-white font-semibold">Address</p>
+                                <p class="text-gray-300">kstp road, near Royal Enfield showroom ,<br>Chemnad, Kerala 671317</p>
+                            </div>
+                        </div>
+                        
+                        <div class="pt-6 border-t border-gray-700">
+                            <h4 class="text-white font-semibold mb-4">Quick Order Options</h4>
+                            <div class="space-y-3">
+                                <button class="w-full bg-green-600 hover:bg-green-700 text-white py-3 px-4 !rounded-button font-semibold transition-colors flex items-center justify-center whitespace-nowrap">
+                                    <div class="w-6 h-6 flex items-center justify-center mr-2">
+                                        <i class="ri-whatsapp-line"></i>
+                                    </div>
+                                    WhatsApp Order
+                                </button>
+                                <button class="w-full glass-effect hover:bg-white hover:bg-opacity-20 text-white py-3 px-4 !rounded-button font-semibold transition-colors flex items-center justify-center whitespace-nowrap">
+                                    <div class="w-6 h-6 flex items-center justify-center mr-2">
+                                        <i class="ri-phone-line"></i>
+                                    </div>
+                                    Call to Order
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Social Media -->
+    <section class="py-20 bg-gray-900">
+        <div class="max-w-4xl mx-auto px-4 text-center">
+            <h2 class="text-4xl md:text-5xl font-playfair font-bold mb-6 text-white">Follow Us</h2>
+            <p class="text-xl text-gray-300 mb-12">Stay connected for latest updates and mouth-watering posts</p>
+            
+          <div class="grid grid-cols-1 md:grid-cols-1 gap-6 flex justify-center">
+    <a href="https://www.instagram.com/karichattichemnad" class="glass-effect p-8 rounded-xl hover:bg-white hover:bg-opacity-20 transition-all duration-300 group">
+        <div class="w-16 h-16 mx-auto mb-4 flex items-center justify-center text-4xl text-pink-500 group-hover:scale-110 transition-transform">
+            <i class="ri-instagram-line"></i>
+        </div>
+        <h3 class="text-white font-semibold">Instagram</h3>
+        <p class="text-gray-400 text-sm mt-1">@nadancurrychatti</p>
+    </a>
+</div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-black py-12">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="grid md:grid-cols-3 gap-8 mb-8">
+                <div>
+                    <h3 class="text-2xl font-playfair font-bold text-secondary mb-4">Nadan Curry Chatti</h3>
+                    <p class="text-gray-400 mb-4">
+                        Bringing you the authentic taste of Kerala since 2022. Experience traditional flavors crafted with love and the finest spices.
+                    </p>
+                    <div class="flex space-x-4">
+                        <!-- <a href="https://www.instagram.com/karichattichemnad" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-primary transition-colors">
+                            <div class="w-5 h-5 flex items-center justify-center">
+                                <i class="ri-instagram-line text-white"></i>
+                            </div>
+                        </a> -->
+                        <!-- <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-primary transition-colors">
+                            <div class="w-5 h-5 flex items-center justify-center">
+                                <i class="ri-facebook-line text-white"></i>
+                            </div>
+                        </a>
+                        <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-primary transition-colors">
+                            <div class="w-5 h-5 flex items-center justify-center">
+                                <i class="ri-youtube-line text-white"></i>
+                            </div> -->
+                        <!-- </a> -->
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#home" class="text-gray-400 hover:text-secondary transition-colors">Home</a></li>
+                        <li><a href="#about" class="text-gray-400 hover:text-secondary transition-colors">About Us</a></li>
+                        <li><a href="#dishes" class="text-gray-400 hover:text-secondary transition-colors">Our Dishes</a></li>
+                        <li><a href="#gallery" class="text-gray-400 hover:text-secondary transition-colors">Gallery</a></li>
+                        <li><a href="#contact" class="text-gray-400 hover:text-secondary transition-colors">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4">Contact Info</h4>
+                    <div class="space-y-2">
+                        <p class="text-gray-400">kstp road, near Royal Enfield showroom, </p>
+                        <p class="text-gray-400">Chemnad, Kerala 671317</p>
+                        <p class="text-gray-400">(555) 123-CURRY</p>
+                        <p class="text-gray-400">hello@nadancurrychatti.com</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 pt-8 text-center">
+                <p class="text-gray-400">
+                    © 2025 Nadan Curry Chatti. All rights reserved. | The Taste of Home Since 2022
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Lightbox -->
+    <div id="lightbox" class="lightbox">
+        <div class="relative max-w-4xl max-h-full">
+            <img id="lightbox-image" src="" alt="" class="max-w-full max-h-full object-contain">
+            <button id="close-lightbox" class="absolute top-4 right-4 w-12 h-12 bg-black bg-opacity-50 rounded-full flex items-center justify-center hover:bg-opacity-70 transition-colors">
+                <div class="w-6 h-6 flex items-center justify-center">
+                    <i class="ri-close-line text-white ri-xl"></i>
+                </div>
+            </button>
+        </div>
+    </div>
+
+    <script id="navigation-script">
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            
+            mobileMenuBtn.addEventListener('click', function() {
+                mobileMenu.classList.toggle('hidden');
+            });
+            
+            // Smooth scrolling for navigation links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                        // Close mobile menu if open
+                        mobileMenu.classList.add('hidden');
+                    }
+                });
+            });
+            
+            // Navbar background on scroll
+            window.addEventListener('scroll', function() {
+                const navbar = document.getElementById('navbar');
+                if (window.scrollY > 100) {
+                    navbar.style.backgroundColor = 'rgba(0, 0, 0, 0.9)';
+                } else {
+                    navbar.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
+                }
+            });
+        });
+    </script>
+
+    <script id="timeline-animation-script">
+        document.addEventListener('DOMContentLoaded', function() {
+            const timelineItems = document.querySelectorAll('.timeline-item');
+            
+            const observerOptions = {
+                threshold: 0.3,
+                rootMargin: '0px 0px -50px 0px'
+            };
+            
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, observerOptions);
+            
+            timelineItems.forEach(item => {
+                observer.observe(item);
+            });
+        });
+    </script>
+
+    <script id="owner-cards-animation-script">
+        document.addEventListener('DOMContentLoaded', function() {
+            const ownerCards = document.querySelectorAll('.owner-card');
+            
+            const observerOptions = {
+                threshold: 0.3,
+                rootMargin: '0px 0px -50px 0px'
+            };
+            
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach((entry, index) => {
+                    if (entry.isIntersecting) {
+                        setTimeout(() => {
+                            entry.target.style.opacity = '1';
+                            entry.target.style.transform = 'translateY(0)';
+                        }, index * 200);
+                    }
+                });
+            }, observerOptions);
+            
+            ownerCards.forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(50px)';
+                card.style.transition = 'all 0.6s ease';
+                observer.observe(card);
+            });
+        });
+    </script>
+
+ <script id="lightbox-script">
+    function openLightbox(mediaSrc, mediaType = 'image') { // Added mediaType parameter
+        const lightbox = document.getElementById('lightbox');
+        const lightboxContent = document.getElementById('lightbox-content'); // Assume this new ID for content container
+
+        // Clear any previous content (image or video)
+        lightboxContent.innerHTML = ''; 
+
+        if (mediaType === 'image') {
+            const img = document.createElement('img');
+            img.src = mediaSrc;
+            img.classList.add('max-w-full', 'max-h-full', 'object-contain', 'mx-auto'); // Added styling
+            lightboxContent.appendChild(img);
+        } else if (mediaType === 'video') {
+            const video = document.createElement('video');
+            video.src = mediaSrc;
+            video.controls = true; // Essential for video playback controls
+            video.autoplay = true; // Optional: Autoplay when opened
+            video.loop = true; // Optional: Loop video
+            video.classList.add('w-full', 'h-full', 'object-contain', 'mx-auto'); // Added styling
+            lightboxContent.appendChild(video);
+        }
+
+        lightbox.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+    
+    // Function to close the lightbox, now stops video playback
+    function closeLightbox() {
+        const lightbox = document.getElementById('lightbox');
+        const lightboxContent = document.getElementById('lightbox-content');
+        
+        lightbox.classList.remove('active');
+        document.body.style.overflow = 'auto';
+        lightboxContent.innerHTML = ''; // Clear content to stop video playback
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const lightbox = document.getElementById('lightbox');
+        const closeLightboxBtn = document.getElementById('close-lightbox'); // Renamed for clarity
+
+        if (closeLightboxBtn) { // Check if the close button exists
+            closeLightboxBtn.addEventListener('click', closeLightbox);
+        }
+        
+        // Close lightbox when clicking on the overlay itself
+        if (lightbox) { // Check if lightbox exists
+            lightbox.addEventListener('click', function(e) {
+                if (e.target === lightbox) {
+                    closeLightbox();
+                }
+            });
+        }
+        
+        // Close lightbox on Escape key press
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && lightbox && lightbox.classList.contains('active')) {
+                closeLightbox();
+            }
+        });
+    });
+</script>
+    <script id="testimonial-slider-script">
+        document.addEventListener('DOMContentLoaded', function() {
+            const track = document.getElementById('testimonial-track');
+            const prevBtn = document.getElementById('prev-testimonial');
+            const nextBtn = document.getElementById('next-testimonial');
+            
+            let currentSlide = 0;
+            const totalSlides = 3;
+            
+            function updateSlider() {
+                const translateX = -currentSlide * 100;
+                track.style.transform = `translateX(${translateX}%)`;
+            }
+            
+            nextBtn.addEventListener('click', function() {
+                currentSlide = (currentSlide + 1) % totalSlides;
+                updateSlider();
+            });
+            
+            prevBtn.addEventListener('click', function() {
+                currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+                updateSlider();
+            });
+            
+            // Auto-play slider
+            setInterval(function() {
+                currentSlide = (currentSlide + 1) % totalSlides;
+                updateSlider();
+            }, 5000);
+        });
+    </script>
+
+    <script id="parallax-script">
+        document.addEventListener('DOMContentLoaded', function() {
+            const parallaxElements = document.querySelectorAll('.parallax');
+            
+            window.addEventListener('scroll', function() {
+                const scrolled = window.pageYOffset;
+                
+                parallaxElements.forEach(element => {
+                    const rate = scrolled * -0.5;
+                    element.style.transform = `translateY(${rate}px)`;
+                });
+            });
+        });
+    </script>
+</body>
+</html>
